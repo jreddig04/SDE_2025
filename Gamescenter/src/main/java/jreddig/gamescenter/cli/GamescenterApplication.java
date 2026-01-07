@@ -1,50 +1,68 @@
 package jreddig.gamescenter.cli;
 
+import jreddig.gamescenter.core.Game;
 import jreddig.gamescenter.core.GameFactory;
+import jreddig.gamescenter.core.GameRegistry;
+import jreddig.gamescenter.games.rps.RpsFactory;
 import jreddig.gamescenter.games.ttt.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 @SpringBootApplication
 public class GamescenterApplication {
 
     public static void main(String[] args) {
-        GameFactory factory = new TttFactory();
-        TicTacToe game = (TicTacToe) factory.create();
-        game.init();
+        GameRegistry registry = new InMemoryRegistry(List.of(
+                new TttFactory(),
+                new RpsFactory()
+        ));
 
-        game.setObserver(state -> printState((TttState) state));
-        printState(game.state());
+        Map<String, GameCliRunner> runners = Map.of(
+                "tictactoe", new TttCliRunner(),
+                "rps",       new RpsCliRunner()
+        );
 
         var in = new Scanner(System.in);
-        var human = new HumanMoveStrategy(in);
-        var ai = new RandomMoveStrategy();
+        System.out.println("=== Arcade ===");
 
-        char who = 'X';
-        while (!game.isFinished()) {
-            TttPlace move = (who == 'X') ? human.nextMove(game) : ai.nextMove(game);
-            game.handle(move);
-            who = (who == 'X') ? 'O' : 'X';
+        var factories = registry.list();
+        for (int i = 0; i < factories.size(); i++) {
+            var d = factories.get(i).descriptor();
+            System.out.printf("[%d] %s (%s)%n", i + 1, d.name(), d.id());
         }
-        System.out.println("Game over.");
+
+        System.out.print("Select game: ");
+        int sel = safeReadIndex(in, 1, factories.size()) - 1;
+
+        GameFactory factory = factories.get(sel);
+        String gameId = factory.descriptor().id();
+        GameCliRunner runner = runners.get(gameId);
+
+        if (runner == null) {
+            System.out.println("No CLI runner registered for game id: " + gameId);
+            return;
+        }
+
+        Game game = factory.create();
+        game.init();
+        runner.run(game, in);
+
+        System.out.println("Bye!");
     }
 
-    private static void printState(TttState s) {
-        var d = s.board();
-        System.out.printf("""
-                         %c | %c | %c
-                        ---+---+---
-                         %c | %c | %c
-                        ---+---+---
-                         %c | %c | %c
-                        turn: %c   status: %s
-
-                        """,
-                d[0][0], d[0][1], d[0][2],
-                d[1][0], d[1][1], d[1][2],
-                d[2][0], d[2][1], d[2][2],
-                s.current(), s.status());
+    private static int safeReadIndex(Scanner in, int min, int max) {
+        int v;
+        while (true) {
+            if (in.hasNextInt()) {
+                v = in.nextInt();
+                if (v >= min && v <= max) return v;
+            } else in.next();
+            System.out.print("Enter a number between " + min + " and " + max + ": ");
+        }
     }
 }
+
 
