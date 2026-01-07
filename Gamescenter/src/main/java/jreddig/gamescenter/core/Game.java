@@ -5,6 +5,8 @@ public interface Game {
 
     void handle(Command cmd);
 
+    void setObserver(GameObserver obs);
+
     GameState state();
 
     boolean isFinished();

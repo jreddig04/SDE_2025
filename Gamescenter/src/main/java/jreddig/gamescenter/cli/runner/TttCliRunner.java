@@ -1,4 +1,4 @@
-package jreddig.gamescenter.cli;
+package jreddig.gamescenter.cli.runner;
 
 import jreddig.gamescenter.core.Game;
 import jreddig.gamescenter.games.ttt.*;
@@ -19,7 +19,10 @@ public class TttCliRunner implements GameCliRunner {
         char who = 'X';
 
         while (!ttt.isFinished()) {
-            TttPlace move = (who == 'X') ? human.nextMove(ttt) : ai.nextMove(ttt);
+            TttPlace move = (who == 'X')
+                    ? human.nextMove(ttt)
+                    : ai.nextMove(ttt);
+
             ttt.handle(move);
             who = (who == 'X') ? 'O' : 'X';
         }
@@ -42,4 +45,5 @@ public class TttCliRunner implements GameCliRunner {
                 s.current(), s.status());
     }
 }
+
 

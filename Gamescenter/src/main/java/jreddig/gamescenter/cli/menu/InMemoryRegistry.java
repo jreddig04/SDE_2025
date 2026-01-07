@@ -1,4 +1,4 @@
-package jreddig.gamescenter.cli;
+package jreddig.gamescenter.cli.menu;
 
 import jreddig.gamescenter.core.GameFactory;
 import jreddig.gamescenter.core.GameRegistry;
@@ -12,4 +12,5 @@ public record InMemoryRegistry(List<GameFactory> factories) implements GameRegis
         return factories.stream().filter(f -> f.descriptor().id().equals(id)).findFirst();
     }
 }
+
 

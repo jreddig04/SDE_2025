@@ -1,4 +1,4 @@
-package jreddig.gamescenter.cli;
+package jreddig.gamescenter.cli.runner;
 
 import jreddig.gamescenter.core.Game;
 import jreddig.gamescenter.games.rps.RockPaperScissors;
