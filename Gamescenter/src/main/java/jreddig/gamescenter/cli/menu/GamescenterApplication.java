@@ -1,20 +1,20 @@
 package jreddig.gamescenter.cli.menu;
 
-import jreddig.gamescenter.cli.runner.GameCliRunner;
-import jreddig.gamescenter.cli.runner.GuessCliRunner;
-import jreddig.gamescenter.cli.runner.RpsCliRunner;
-import jreddig.gamescenter.cli.runner.TttCliRunner;
+import jreddig.gamescenter.cli.runner.*;
 import jreddig.gamescenter.core.Game;
 import jreddig.gamescenter.core.GameFactory;
 import jreddig.gamescenter.core.GameRegistry;
 import jreddig.gamescenter.games.guess.GuessFactory;
+import jreddig.gamescenter.games.quiz.QuizFactory;
 import jreddig.gamescenter.games.rps.RpsFactory;
-import jreddig.gamescenter.games.ttt.*;
+import jreddig.gamescenter.cli.menu.InMemoryRegistry;
+import jreddig.gamescenter.games.ttt.TttFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
 
 @SpringBootApplication
 public class GamescenterApplication {
@@ -24,13 +24,15 @@ public class GamescenterApplication {
         GameRegistry registry = new InMemoryRegistry(List.of(
                 new TttFactory(),
                 new RpsFactory(),
-                new GuessFactory()
+                new GuessFactory(),
+                new QuizFactory()
         ));
 
         Map<String, GameCliRunner> runners = Map.of(
                 "tictactoe", new TttCliRunner(),
                 "rps",       new RpsCliRunner(),
-                "guess", new GuessCliRunner()
+                "guess", new GuessCliRunner(),
+                "quiz", new QuizCliRunner()
         );
 
         var in = new Scanner(System.in);
@@ -85,6 +87,7 @@ public class GamescenterApplication {
         }
     }
 }
+
 
 
 

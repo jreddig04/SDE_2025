@@ -14,8 +14,9 @@ public class TttCliRunner implements GameCliRunner {
         ttt.setObserver(s -> printTtt((TttState) s));
         printTtt(ttt.state());
 
-        var human = new HumanMoveStrategy(in);
-        var ai    = new RandomMoveStrategy();
+        var human = new LoggingMoveStrategy(new HumanMoveStrategy(in), System.out, "Human");
+        var ai    = new LoggingMoveStrategy(new RandomMoveStrategy(), System.out, "AI");
+
         char who = 'X';
 
         while (!ttt.isFinished()) {
@@ -45,5 +46,6 @@ public class TttCliRunner implements GameCliRunner {
                 s.current(), s.status());
     }
 }
+
 
 

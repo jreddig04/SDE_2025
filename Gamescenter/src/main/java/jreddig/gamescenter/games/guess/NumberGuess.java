@@ -16,6 +16,9 @@ public class NumberGuess implements Game {
 
     @Override
     public void init() {
+        AppConfig cfg = AppConfig.instance();
+        int min = cfg.minGuess();
+        int max = cfg.maxGuess();
         target = new Random().nextInt(100) + 1; // random 1..100
         attempts = 0;
         lastGuess = null;
@@ -67,4 +70,5 @@ public class NumberGuess implements Game {
             observer.onStateChange(state());
     }
 }
+
 
