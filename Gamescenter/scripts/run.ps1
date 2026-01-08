@@ -65,9 +65,12 @@ function Compile-All($junitJarLeaf) {
 function Run-Tests($junitJarLeaf) {
     $mvn = Get-MavenCmd
     if (Is-MavenProject -and $mvn) {
-        & $mvn -q test
+        Write-Host "`n=== RUNNING TESTS ==="
+        & $mvn test
+        Write-Host "=== TESTS DONE (exit $LASTEXITCODE) ===`n"
         return
     }
+
 
     if (-not (Test-Path "out/test")) { return }
     $cp = "out/main;out/test"
