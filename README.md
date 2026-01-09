@@ -27,7 +27,7 @@ Use the following command in the terminal to automatically:
 1. install dependencies (JUnit),
 2. compile all Java source files,
 3. run all unit tests,
-4. and launch the arcade application:
+4. and launch the gamescenter application:
  
 ```powershell
 .\scripts\run.ps1
@@ -40,13 +40,13 @@ Use the following command in the terminal to automatically:
 The project uses a simple but scalable structure inside `src/main/java`:
  
 ```
-arcade/
-  core/        → framework and shared interfaces
-  games/       → each game in its own subpackage
-  cli/         → console UI and game runners
+jreddig/gamescenter/
+  core
+  games
+  cli
 ```
  
-### 1. `arcade.core` — Core Framework
+### 1. `jreddig/gamescenter/core` — Core Framework
  
 This package defines the abstractions that all games depend on:
  
@@ -61,15 +61,15 @@ This package defines the abstractions that all games depend on:
  
 This package contains *no* game-specific logic.
  
-### 2. `arcade.games` — Individual Games
+### 2. `jreddig.gamescenter.games` — Individual Games
  
 Each game lies in its own subpackage, for example:
  
 ```
-arcade/games/ttt/   → TicTacToe
-arcade/games/rps/   → Rock-Paper-Scissors
-arcade/games/guess/ → Number Guess
-arcade/games/quiz/  → Math Quiz
+jreddig.gamescenter/games/ttt/   → TicTacToe
+jreddig.gamescenter/games/rps/   → Rock-Paper-Scissors
+jreddig.gamescenter/games/guess/ → Number Guess
+jreddig.gamescenter/games/quiz/  → Math Quiz
 ```
  
 Each game contains:
@@ -79,7 +79,7 @@ Each game contains:
 - its state objects (e.g. `TttState`)
 - its runner in the CLI layer
  
-### 3. `arcade.cli` — Console User Interface
+### 3. `jreddig/gamescenter/cli/` — Console User Interface
  
 This layer is responsible for:
  
@@ -231,7 +231,7 @@ Implemented in:
 Tests are located under:
  
 ```
-src/test/java/arcade/games/...
+src/test/java/jreddig/gamescenter/games/...
 ```
  
 They are executed **automatically** by the PowerShell script before starting the application.
